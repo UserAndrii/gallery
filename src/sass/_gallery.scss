@@ -74,14 +74,15 @@
   overflow: hidden;
   border-radius: 5px;
   margin: 20px auto 0;
+
+  span {
+    transition: all 0.7s;
+    z-index: -1;
+  }
 }
 
 .load-more:hover {
   color: #000;
-}
-span {
-  transition: all 0.7s;
-  z-index: -1;
 }
 
 .load-more .first {
