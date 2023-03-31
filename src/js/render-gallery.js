@@ -40,7 +40,6 @@ export function renderGallery(data) {
     .join('');
   refs.loadMore.style.display = 'none';
   refs.gallery.insertAdjacentHTML('beforeend', gallery);
-  refs.loadMore.style.display = 'block';
 }
 
 export function clearThePage() {

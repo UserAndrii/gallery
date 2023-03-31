@@ -45,29 +45,43 @@ async function fetchDataAndRenderPage() {
   refs.loadMore.style.display = 'none';
   imegesApiService.resetNumberPage();
 
-  const fetch = await imegesApiService.fetchImages();
-  if (fetch.data.total === 0) { // перенести в клас
-    imegesApiService.emptyArray();
-    return;
-  }
+  try {
+    const fetch = await imegesApiService.fetchImages();
+    if (fetch.data.total === 0) {
+      imegesApiService.emptyArray();
+      return;
+    }
 
-  imegesApiService.totalImagesFound(fetch.data.totalHits);
-  renderGallery(fetch.data.hits);
-  smoothScrolling();
-  lightbox.refresh();
+    imegesApiService.totalImagesFound(fetch.data.totalHits);
+    renderGallery(fetch.data.hits);
+
+    if (fetch.data.totalHits > imegesApiService.per_page) {
+      refs.loadMore.style.display = 'block';
+    }
+
+    smoothScrolling();
+    lightbox.refresh();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export async function onLoadMore() {
+async function onLoadMore() {
   const { page, per_page } = imegesApiService;
 
-  const fetch = await imegesApiService.fetchImages();
-  renderGallery(fetch.data.hits);
-  smoothScrolling();
-  lightbox.refresh();
+  try {
+    const fetch = await imegesApiService.fetchImages();
+    renderGallery(fetch.data.hits);
+    smoothScrolling();
+    lightbox.refresh();
+    refs.loadMore.style.display = 'block';
 
-  if (page * per_page > fetch.data.totalHits) {
-    imegesApiService.finalyPage();
-    refs.loadMore.style.display = 'none';
+    if (page * per_page > fetch.data.totalHits) {
+      imegesApiService.finalyPage();
+      refs.loadMore.style.display = 'none';
+    }
+  } catch (error) {
+    console.error(error);
   }
 }
 
